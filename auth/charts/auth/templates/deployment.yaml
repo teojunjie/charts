@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "auth.fullname" . }}
+  labels:
+    {{- include "auth.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "auth.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "auth.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.global.repository }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env: 
+        - name: POSTGRES_HOST
+          value: postgres-service
+        - name: REDIS_HOST
+          value: redis-service
+        - name: PLACES_TOKEN
+          value: AIzaSyCyOceoFGw8n_lopxTxLuL-OXoatF21jWE
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        volumeMounts:
+        - name: postgres-volume-mount	
+          mountPath: /var/lib/busybox      
+    {{- include "charts.volume" . | nindent 6 }}
+    volumes:
+    - name: {{ .Release.Name }}-v
+      hostPath:
+        path: {{ .Values.global.codePath }}
