@@ -1,3 +1,0 @@
-global:
-  repository:  gcr.io/composite-keel-269505/trippin@sha256:7c6a380068ef22fa205c081cf41276e67248d058b8e7463b971b1540cbe67d4c
-  env: prod
