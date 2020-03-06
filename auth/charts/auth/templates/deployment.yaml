@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: {{ .Chart.Name }}
-        image: "{{ .Values.global.repository }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        image: {{ if .Values.global.imageName }}{{ .Values.global.imageName }}{{ else }}"{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}"{{ end }}
+        imagePullPolicy: {{ if .Values.global.image.pullPolicy }}{{ .Values.global.image.pullPolicy }}{{ else }}"Never"{{end}}
         env: 
         - name: POSTGRES_HOST
           value: postgres-service
