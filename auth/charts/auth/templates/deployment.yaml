@@ -21,6 +21,16 @@ spec:
         env: 
         - name: POSTGRES_HOST
           value: postgres-service
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-credentials
+              key: user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-credentials
+              key: password
         - name: REDIS_HOST
           value: redis-service
         - name: PLACES_TOKEN
@@ -31,9 +41,6 @@ spec:
         - name: http
           containerPort: 8080
           protocol: TCP
-        volumeMounts:
-        - name: postgres-volume-mount	
-          mountPath: /var/lib/busybox      
     {{- include "charts.volume" . | nindent 6 }}
     volumes:
     - name: {{ .Release.Name }}-v

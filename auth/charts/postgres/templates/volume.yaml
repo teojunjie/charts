@@ -12,5 +12,6 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
+    type: DirectoryOrCreate
     path: /data/postgres-pv
 {{ end }}
