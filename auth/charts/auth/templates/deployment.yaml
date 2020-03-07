@@ -20,7 +20,9 @@ spec:
         imagePullPolicy: {{ if .Values.global.image.pullPolicy }}{{ .Values.global.image.pullPolicy }}{{ else }}"Never"{{end}}
         env: 
         - name: POSTGRES_HOST
-          value: postgres-service
+          value: {{ .Values.global.postgresHost }}
+        - name: POSTGRES_DB
+          value: {{ .Values.global.postgresDB }}
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
@@ -41,7 +43,6 @@ spec:
         - name: http
           containerPort: 8080
           protocol: TCP
-    {{- include "charts.volume" . | nindent 6 }}
     volumes:
     - name: {{ .Release.Name }}-v
       hostPath:
