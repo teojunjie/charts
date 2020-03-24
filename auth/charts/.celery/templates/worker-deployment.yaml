@@ -16,20 +16,11 @@ spec:
     spec:
       containers:
       - name: celery-worker
-        image: "{{ .Values.global.repository }}"
+        image: {{ .Values.global.repository | quote }}
         command: ['celery', '-A', 'base_app', 'worker', '-l', 'info']
         env:
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: postgres-credentials
-              key: user
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgres-credentials
-              key: password
+        {{- include "charts.env" . | nindent 8 }}
         - name: POSTGRES_HOST
-          value: postgres-service
+          value: {{ .Values.global.postgres.host }}
         - name: REDIS_HOST
-          value: redis-service
+          value: {{ .Values.global.redis.host }}

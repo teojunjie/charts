@@ -16,6 +16,8 @@ credentials:
   user: ZGphbmdv
   password: MWEyNmQxZzI2ZDFnZXNiP2U3ZGVzYj9lN2Q=
 
+mountPath: /var/lib/postgresql/data 
+
 resources: 
   limits:
     cpu: 200m

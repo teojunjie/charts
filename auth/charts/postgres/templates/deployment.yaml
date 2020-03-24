@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "postgres.fullname" . }}
+  name: {{ include "postgres.name" . }}
   labels:
     {{- include "postgres.labels" . | nindent 4 }}
 spec:
@@ -9,6 +9,7 @@ spec:
   selector:
     matchLabels:
       {{- include "postgres.selectorLabels" . | nindent 6 }}
+  serviceName: {{ .Values.global.postgres.host }}
   template:
     metadata:
       labels:
@@ -16,28 +17,19 @@ spec:
     spec:
       containers:
       - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+        image: {{ .Values.image.repository | quote }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
         - name: POSTGRES_DB
-          value: kubernetes_django
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: postgres-credentials
-              key: user
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgres-credentials
-              key: password
+          value: {{ .Values.global.postgres.db | quote }}
         {{- include "charts.env" . | nindent 8 }}
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
         ports:
-        - containerPort: 5432
+        - containerPort: {{ .Values.service.port }}
         volumeMounts:
-        - name: postgres-volume-mount
-          mountPath: /var/lib/postgresql/data
+        - name: {{ .Values.global.postgres.volume }}
+          mountPath: {{ .Values.mountPath }}
           subPath: postgres
       {{- include "charts.volume" . | nindent 6 }}
+      

@@ -1,0 +1,13 @@
+USER-SUPPLIED VALUES:
+global:
+  env: local
+  gcpApi:
+    secret: gcp-api-credentials
+  postgres:
+    db: kubernetes_django
+    host: postgres-service
+    pvc: postgres-pvc
+    secret: postgres-credentials
+    volume: postgres-volume-mount
+  redis:
+    host: redis-service

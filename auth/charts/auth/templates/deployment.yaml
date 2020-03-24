@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "auth.fullname" . }}
+  name: {{ include "auth.name" . }}
   labels:
     {{- include "auth.labels" . | nindent 4 }}
 spec:
@@ -16,34 +16,23 @@ spec:
     spec:
       containers:
       - name: {{ .Chart.Name }}
-        image: {{ if .Values.global.imageName }}{{ .Values.global.imageName }}{{ else }}"{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}"{{ end }}
-        imagePullPolicy: {{ if .Values.global.image.pullPolicy }}{{ .Values.global.image.pullPolicy }}{{ else }}"Never"{{end}}
+        image: {{ .Values.image.repository | quote }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         env: 
         - name: POSTGRES_HOST
-          value: {{ .Values.global.postgresHost }}
-        - name: POSTGRES_DB
-          value: {{ .Values.global.postgresDB }}
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: postgres-credentials
-              key: user
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgres-credentials
-              key: password
+          value: {{ .Values.global.postgres.host }}
         - name: REDIS_HOST
-          value: redis-service
+          value: {{ .Values.global.redis.host }}
         - name: PLACES_TOKEN
-          value: AIzaSyCyOceoFGw8n_lopxTxLuL-OXoatF21jWE
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.global.gcpApi.secret }}
+              key: PLACES_TOKEN
+        {{- include "charts.env" . | nindent 8 }}
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
         ports:
         - name: http
           containerPort: 8080
           protocol: TCP
-    volumes:
-    - name: {{ .Release.Name }}-v
-      hostPath:
-        path: {{ .Values.global.codePath }}
+       

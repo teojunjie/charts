@@ -3,13 +3,11 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 image:
+  repository: gcr.io/composite-keel-269505/auth
   pullPolicy: IfNotPresent
 service:
   type: ClusterIP
-global:
-  env: prod
-  repository: gcr.io/composite-keel-269505/auth:latest
-  codePath: "D:/Jun Jie Data/auth/backend/"
+  port: 8080
 
 resources: 
   limits:
@@ -18,3 +16,7 @@ resources:
   requests:
     cpu: 100m
     memory: 280Mi
+
+credentials:
+  placesApi:
+    token: AIzaSyCyOceoFGw8n_lopxTxLuL-OXoatF21jWE

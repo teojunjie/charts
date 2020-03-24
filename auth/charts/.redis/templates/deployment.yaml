@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "redis.fullname" . }}
+  name: {{ include "redis.name" . }}
   labels:
     {{- include "redis.labels" . | nindent 4 }}
 spec:
@@ -16,10 +16,10 @@ spec:
     spec:
       containers:
       - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+        image: {{ .Values.image.repository | quote }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: 6379
+        - containerPort: {{ .Values.service.port }}
           protocol: TCP
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
