@@ -37,5 +37,5 @@ app.kubernetes.io/name: {{ include "charts.name" . }}
 volumes:
 - name: {{ .Values.global.postgres.volume }}
   persistentVolumeClaim:
-    claimName: postgres-pvc {{ .Values.global.postgres.pvc }}
+    claimName: {{ .Values.global.postgres.pvc }}
 {{- end -}}
