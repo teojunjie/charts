@@ -21,15 +21,15 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
         - name: POSTGRES_DB
-          value: {{ .Values.global.postgres.db | quote }}
+          value: {{ .Values.db | quote }}
         {{- include "charts.env" . | nindent 8 }}
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
         ports:
         - containerPort: {{ .Values.service.port }}
         volumeMounts:
-        - name: {{ .Values.global.postgres.volume }}
+        - name: {{ .Values.volume }}
           mountPath: {{ .Values.mountPath }}
           subPath: postgres
-      {{- include "charts.volume" . | nindent 6 }}
+      {{- include "postgres.volume" . | nindent 6 }}
       

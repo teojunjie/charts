@@ -24,18 +24,11 @@ app.kubernetes.io/name: {{ include "charts.name" . }}
 - name: POSTGRES_USER
   valueFrom:
     secretKeyRef:
-      name: postgres-credentials
+      name: {{ .Values.global.postgres.secret }}
       key: user
 - name: POSTGRES_PASSWORD
   valueFrom:
     secretKeyRef:
-      name: postgres-credentials
+      name: {{ .Values.global.postgres.secret }}
       key: password
-{{- end -}}
-
-{{- define "charts.volume" -}}
-volumes:
-- name: {{ .Values.global.postgres.volume }}
-  persistentVolumeClaim:
-    claimName: {{ .Values.global.postgres.pvc }}
 {{- end -}}

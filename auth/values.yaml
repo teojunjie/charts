@@ -1,7 +1,5 @@
 global:
   env: local
-  # TODO: move global.postgres.(volume, db, pvc) out of global if determined 
-  # trippin depl does not reference these values
   postgres:
     volume: postgres-volume-mount
     secret: postgres-credentials

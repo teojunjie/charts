@@ -50,3 +50,9 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 env: {{ .Values.global.env | default "local" | quote }}
 {{- end -}}
 
+{{- define "postgres.volume" -}}
+volumes:
+- name: {{ .Values.volume }}
+  persistentVolumeClaim:
+    claimName: {{ .Values.pvc }}
+{{- end -}}

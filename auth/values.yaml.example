@@ -7,7 +7,7 @@ global:
     db: kubernetes_django
     host: postgres-service
     pvc: postgres-pvc
-    secret: postgres-credentials
+    secret: {{ .Values.global.postgres.secret }}
     volume: postgres-volume-mount
   redis:
     host: redis-service
