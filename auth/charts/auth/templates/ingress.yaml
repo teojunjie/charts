@@ -3,12 +3,18 @@ kind: Ingress
 metadata:
   name: auth-backend
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    cert-manager.io/issuer: "letsencrypt-production"
 spec:
+  tls:
+  - hosts:
+    - {{ .Values.hostname }}
+    secretName: trippin-auth-tls
   rules:
-  - http:
+  - host: {{ .Values.hostname }}
+    http:
       paths:
-      - path: /api/(.*)
+      - path: /api(/|$)(.*)
         backend:
           serviceName: auth
           servicePort: 8080
